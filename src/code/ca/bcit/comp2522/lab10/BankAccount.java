@@ -43,6 +43,7 @@ public class BankAccount
         this.balance += amount;
     }
 
+
     public double withdraw(final double amount)
     {
         validateAmount(amount);
@@ -55,4 +56,10 @@ public class BankAccount
         }
     }
 
+    public void transferToBank(final BankAccount account, final String accountID,  final int amount)
+    {
+        validateAccountID(accountID);
+        validateAmount(amount);
+        account.deposit(this.withdraw(amount));
+    }
 }

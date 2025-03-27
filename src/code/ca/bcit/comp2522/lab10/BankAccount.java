@@ -18,6 +18,11 @@ public class BankAccount
         return balance;
     }
 
+    protected String getAccountID()
+    {
+        return accountID;
+    }
+
     private void validateAmount(final double amount)
     {
         if (amount < 0)
@@ -31,7 +36,7 @@ public class BankAccount
         if (accountID == null || accountID.isEmpty())
         {
             throw new IllegalArgumentException("Account ID cannot be empty");
-        } else if (!accountID.matches("0-9"))
+        } else if (!accountID.matches("[0-9]+"))
         {
             throw new IllegalArgumentException("Account ID can only contain numbers (0-9)");
         }

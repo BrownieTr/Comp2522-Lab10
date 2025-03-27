@@ -59,6 +59,10 @@ public class BankAccount
     public void transferToBank(final BankAccount account, final String accountID,  final int amount)
     {
         validateAccountID(accountID);
+        if (!this.accountID.equals(accountID))
+        {
+            throw new IllegalArgumentException("Account ID does not match");
+        }
         validateAmount(amount);
         account.deposit(this.withdraw(amount));
     }

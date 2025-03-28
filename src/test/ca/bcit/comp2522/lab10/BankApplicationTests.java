@@ -91,21 +91,50 @@ public class BankApplicationTests
         IllegalArgumentException exception1 =
                 assertThrows(IllegalArgumentException.class, () ->
                         bank1.retrieveAccount("99999"));
-        assertEquals("Account not found", exception1.getMessage());
         IllegalArgumentException exception2 =
                 assertThrows(IllegalArgumentException.class, () ->
                         bank2.retrieveAccount("00000"));
-        assertEquals("Account not found", exception2.getMessage());
+
+        final String expectedError;
+        expectedError = "Account not found";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
     }
 
     @Test
     void negativeInitialBalance()
     {
-        IllegalArgumentException exception =
+        IllegalArgumentException exception1 =
                 assertThrows(IllegalArgumentException.class,
                              () -> account1 =
                                      new BankAccount("0000", -9));
-        assertEquals("Amount cannot be negative", exception.getMessage());
+        IllegalArgumentException exception2 =
+                assertThrows(IllegalArgumentException.class,
+                             () -> account1 =
+                                     new BankAccount("1234", -25));
+
+        final String expectedError;
+        expectedError = "Amount cannot be negative";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
+    }
+
+    @Test
+    void emptyAccountID()
+    {
+        IllegalArgumentException exception1
+                = assertThrows(IllegalArgumentException.class,
+                               () -> account1 =
+                                       new BankAccount(null, 0));
+        IllegalArgumentException exception2
+                = assertThrows(IllegalArgumentException.class,
+                               () -> account2 =
+                                       new BankAccount("   ", 0));
+
+        final String expectedError;
+        expectedError = "Account ID cannot be empty";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
     }
 
     @Test
@@ -113,28 +142,37 @@ public class BankApplicationTests
     {
         IllegalArgumentException exception1
                 = assertThrows(IllegalArgumentException.class,
-                               () -> account1 =
-                                       new BankAccount(null, 0));
-        assertEquals("Account ID cannot be empty",
-                     exception1.getMessage());
-
+                               () -> account2 =
+                                       new BankAccount("hi mom!",
+                                                       10));
         IllegalArgumentException exception2
                 = assertThrows(IllegalArgumentException.class,
                                () -> account2 =
-                                       new BankAccount("hello world", 0));
-        assertEquals("Account ID can only contain numbers (0-9)",
-                     exception2.getMessage());
+                                       new BankAccount("hello world!",
+                                                       0));
+        final String expectedError;
+        expectedError = "Account ID can only contain numbers (0-9)";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
     }
 
     @Test
     void transferIDNotMatching()
     {
-        IllegalArgumentException exception =
+        IllegalArgumentException exception1 =
                 assertThrows(IllegalArgumentException.class,
                              () -> account1.transferToBank(account2,
                                                            "11111",
                                                            0));
-        assertEquals("Account ID does not match", exception.getMessage());
+        IllegalArgumentException exception2 =
+                assertThrows(IllegalArgumentException.class,
+                             () -> account2.transferToBank(account2,
+                                                           "98765",
+                                                           0));
+        final String expectedError;
+        expectedError = "Account ID does not match";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
     }
 
     @Test
@@ -145,13 +183,26 @@ public class BankApplicationTests
                              () -> account1.transferToBank(account2,
                                                            "12345",
                                                            -1));
-        assertEquals("Amount cannot be negative", exception1.getMessage());
-
         IllegalArgumentException exception2 =
                 assertThrows(IllegalArgumentException.class,
                              () -> account1.transferToBank(account2,
                                                            "12345",
+                                                           -100));
+        assertEquals("Amount cannot negative", exception1.getMessage());
+        assertEquals("Amount cannot negative", exception2.getMessage());
+
+
+        IllegalArgumentException exception3 =
+                assertThrows(IllegalArgumentException.class,
+                             () -> account1.transferToBank(account2,
+                                                           "12345",
                                                            2000));
-        assertEquals("Insufficient funds", exception2.getMessage());
+        IllegalArgumentException exception4 =
+                assertThrows(IllegalArgumentException.class,
+                             () -> account1.transferToBank(account2,
+                                                           "12345",
+                                                           1500));
+        assertEquals("Insufficient funds", exception3.getMessage());
+        assertEquals("Insufficient funds", exception4.getMessage());
     }
 }

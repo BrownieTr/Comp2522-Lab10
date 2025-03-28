@@ -64,5 +64,4 @@ public class Bank
                           .mapToDouble(BankAccount::getBalanceUsd)
                           .sum();
     }
-
 }

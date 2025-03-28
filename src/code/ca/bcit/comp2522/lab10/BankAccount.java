@@ -62,7 +62,7 @@ public class BankAccount
 
     private void validateAccountID(final String accountID)
     {
-        if(accountID == null || accountID.isEmpty())
+        if(accountID == null || accountID.isBlank())
         {
             throw new IllegalArgumentException("Account ID cannot be empty");
         }

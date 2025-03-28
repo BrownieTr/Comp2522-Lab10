@@ -2,7 +2,7 @@ package ca.bcit.comp2522.lab10;
 
 public class BankAccount
 {
-    private double balance;
+    private       double balance;
     private final String accountID;
 
     public BankAccount(final String accountID, final int initialBalance)
@@ -10,7 +10,7 @@ public class BankAccount
         validateAccountID(accountID);
         validateAmount(initialBalance);
         this.accountID = accountID;
-        this.balance = initialBalance;
+        this.balance   = initialBalance;
     }
 
     protected double getBalanceUsd()
@@ -25,7 +25,7 @@ public class BankAccount
 
     private void validateAmount(final double amount)
     {
-        if (amount < 0)
+        if(amount < 0)
         {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
@@ -33,12 +33,14 @@ public class BankAccount
 
     private void validateAccountID(final String accountID)
     {
-        if (accountID == null || accountID.isEmpty())
+        if(accountID == null || accountID.isEmpty())
         {
             throw new IllegalArgumentException("Account ID cannot be empty");
-        } else if (!accountID.matches("[0-9]+"))
+        }
+        if(!accountID.matches("[0-9]+"))
         {
-            throw new IllegalArgumentException("Account ID can only contain numbers (0-9)");
+            throw new IllegalArgumentException(
+                    "Account ID can only contain numbers (0-9)");
         }
     }
 
@@ -52,19 +54,20 @@ public class BankAccount
     public double withdraw(final double amount)
     {
         validateAmount(amount);
-        if (amount > this.balance) {
-            throw new IllegalArgumentException("Insufficient funds");
-        } else
+        if(amount > this.balance)
         {
-            this.balance -= amount;
-            return amount;
+            throw new IllegalArgumentException("Insufficient funds");
         }
+        this.balance -= amount;
+        return amount;
     }
 
-    public void transferToBank(final BankAccount account, final String accountID,  final int amount)
+    public void transferToBank(final BankAccount account,
+                               final String accountID,
+                               final int amount)
     {
         validateAccountID(accountID);
-        if (!this.accountID.equals(accountID))
+        if(!this.accountID.equals(accountID))
         {
             throw new IllegalArgumentException("Account ID does not match");
         }

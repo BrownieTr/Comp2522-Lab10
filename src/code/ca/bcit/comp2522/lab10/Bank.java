@@ -19,7 +19,7 @@ public class Bank
 
     public BankAccount retrieveAccount(final String accountID)
     {
-        for (BankAccount account : accountList)
+        for(final BankAccount account : accountList)
         {
             if(account.getAccountID().equals(accountID))
             {
@@ -31,9 +31,9 @@ public class Bank
 
     public double totalBalanceUsd()
     {
-        double[] totalBalance = {0.0};
-        accountList.forEach(account -> totalBalance[0]+=account.getBalanceUsd());
-        return totalBalance[0];
+        return accountList.stream()
+                          .mapToDouble(BankAccount::getBalanceUsd)
+                          .sum();
     }
 
 }

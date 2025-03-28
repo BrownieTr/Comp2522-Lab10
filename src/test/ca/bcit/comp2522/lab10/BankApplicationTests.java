@@ -176,7 +176,7 @@ public class BankApplicationTests
     }
 
     @Test
-    void invalidTransferAmount()
+    void negativeTransferAmount()
     {
         IllegalArgumentException exception1 =
                 assertThrows(IllegalArgumentException.class,
@@ -188,21 +188,28 @@ public class BankApplicationTests
                              () -> account1.transferToBank(account2,
                                                            "12345",
                                                            -100));
-        assertEquals("Amount cannot negative", exception1.getMessage());
-        assertEquals("Amount cannot negative", exception2.getMessage());
+        final String expectedError;
+        expectedError = "Amount cannot be negative";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
+    }
 
-
-        IllegalArgumentException exception3 =
+    @Test
+    void insufficientFundToTransfer()
+    {
+        IllegalArgumentException exception1 =
                 assertThrows(IllegalArgumentException.class,
                              () -> account1.transferToBank(account2,
                                                            "12345",
                                                            2000));
-        IllegalArgumentException exception4 =
+        IllegalArgumentException exception2 =
                 assertThrows(IllegalArgumentException.class,
                              () -> account1.transferToBank(account2,
                                                            "12345",
                                                            1500));
-        assertEquals("Insufficient funds", exception3.getMessage());
-        assertEquals("Insufficient funds", exception4.getMessage());
+        final String expectedError;
+        expectedError = "Insufficient funds";
+        assertEquals(expectedError, exception1.getMessage());
+        assertEquals(expectedError, exception2.getMessage());
     }
 }
